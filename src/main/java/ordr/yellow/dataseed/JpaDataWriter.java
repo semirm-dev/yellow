@@ -18,16 +18,19 @@ public class JpaDataWriter implements DataWriter {
 
     @Override
     public void write(DataContent dataContent) {
-        // write markets
-        List<Market> markets = dataContent.getMarkets();
+        writeMarkets(dataContent.getMarkets());
+        writeEvents(dataContent.getEvents());
+    }
+
+    private void writeMarkets(List<Market> markets) {
         markets.forEach(market -> {
             this.offerRepository.getMarketOutcomeRepository().saveAll(market.getOutcomes());
         });
 
         this.offerRepository.getMarketRepository().saveAll(markets);
+    }
 
-        // write events
-        List<Event> events = dataContent.getEvents();
+    private void writeEvents(List<Event> events) {
         events.forEach(event -> {
             event.getMarkets().forEach(market -> {
                 this.offerRepository.getEventMarketOutcomeRepository().saveAll(market.getOutcomes());
