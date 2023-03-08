@@ -24,9 +24,9 @@ public class DataSeeder {
     public void seed() {
         logger.info("loading initial data...");
 
-        Event event = this.dataReader.read();
+        DataContent dataContent = this.dataReader.read();
 
-        this.dataWriter.write(event);
+        this.dataWriter.write(dataContent);
 
     }
 }
