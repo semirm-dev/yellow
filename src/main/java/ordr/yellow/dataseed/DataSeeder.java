@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataSeeder {
 
+    private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
     private final DataReader dataReader;
     private final DataWriter dataWriter;
-
-    private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
 
     public DataSeeder(DataReader dataReader, DataWriter dataWriter) {
         this.dataReader = dataReader;

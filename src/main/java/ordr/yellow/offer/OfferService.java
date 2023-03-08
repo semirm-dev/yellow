@@ -9,7 +9,7 @@ import java.util.List;
 public class OfferService {
 
     private final StateLoader stateLoader;
-
+    private List<Market> markets = new LinkedList<>();
     private List<Event> events = new LinkedList<>();
 
     public OfferService(StateLoader stateLoader) {
@@ -21,14 +21,19 @@ public class OfferService {
     }
 
     public void loadState() {
-        this.events = this.stateLoader.load();
+        this.markets = this.stateLoader.loadMarkets();
+        this.events = this.stateLoader.loadEvents();
+    }
+
+    public List<Market> getMarkets() {
+        return this.markets;
     }
 
     public List<Event> getEvents() {
+        // TODO: make sure response corresponds to events.json
         return this.events;
     }
 
     // TODO: listen for markets and events kafka topics
-
-    // TODO: update local state (events) with newly received markets and events from kafka
+    // TODO: update local state of markets and events with newly received markets and events from kafka
 }

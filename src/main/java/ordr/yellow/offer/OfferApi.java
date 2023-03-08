@@ -22,6 +22,11 @@ public class OfferApi {
         return ResponseEntity.ok(this.offerService.healthz());
     }
 
+    @GetMapping("markets")
+    public ResponseEntity<List<Market>> getMarkets() {
+        return ResponseEntity.ok(this.offerService.getMarkets());
+    }
+
     @GetMapping("events")
     public ResponseEntity<List<Event>> getEvents() {
         return ResponseEntity.ok(this.offerService.getEvents());

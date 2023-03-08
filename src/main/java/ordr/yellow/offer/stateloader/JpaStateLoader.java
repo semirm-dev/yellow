@@ -1,54 +1,37 @@
 package ordr.yellow.offer.stateloader;
 
-import ordr.yellow.offer.*;
+import ordr.yellow.offer.Event;
+import ordr.yellow.offer.Market;
+import ordr.yellow.offer.StateLoader;
+import ordr.yellow.offer.repository.EventsRepository;
+import ordr.yellow.offer.repository.MarketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class JpaStateLoader implements StateLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(JpaStateLoader.class);
+    private final MarketRepository marketRepository;
+    private final EventsRepository eventsRepository;
+
+    public JpaStateLoader(MarketRepository marketRepository, EventsRepository eventsRepository) {
+        this.marketRepository = marketRepository;
+        this.eventsRepository = eventsRepository;
+    }
 
     @Override
-    public List<Event> load() {
-        logger.info("loading data from jpa datastore");
+    public List<Market> loadMarkets() {
+        logger.info("loading markets from jpa datastore");
+        return this.marketRepository.findAll();
+    }
 
-        Market market = new Market();
-        market.setId("m-1");
-        market.setName("Market 1");
-        market.setStatus(Status.ACTIVE);
-
-        MarketOutcome mOutcome = new MarketOutcome();
-        mOutcome.setId("m-outcome-1");
-        mOutcome.setName("Market outcome 1");
-        mOutcome.setStatus(Status.ACTIVE);
-
-        market.setOutcomes(List.of(mOutcome));
-
-        Event ev = new Event();
-        ev.setId("ev-1");
-        ev.setName("Event 1");
-        ev.setStatus(Status.ACTIVE);
-        ev.setStartsAt(new Date());
-
-        EventMarket evMarket = new EventMarket();
-        evMarket.setId("ev-market-1");
-        evMarket.setStatus(Status.ACTIVE);
-        evMarket.setMarket(market);
-
-        EventMarketOutcome evMarketOutcome = new EventMarketOutcome();
-        evMarketOutcome.setId("ev-market-outcome-1");
-        evMarketOutcome.setStatus(Status.ACTIVE);
-        evMarketOutcome.setOdd(2d);
-
-        evMarketOutcome.setOutcome(mOutcome);
-        evMarket.setOutcomes(List.of(evMarketOutcome));
-        ev.setMarkets(List.of(evMarket));
-
-        return List.of(ev);
+    @Override
+    public List<Event> loadEvents() {
+        logger.info("loading events from jpa datastore");
+        return this.eventsRepository.findAll();
     }
 }
