@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ordr.yellow.offer.Event;
 import ordr.yellow.offer.Market;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,11 +13,8 @@ import java.util.List;
 @Service
 public class FileDataReader implements DataReader {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileDataReader.class);
-
     @Override
     public DataContent read() {
-        logger.info("reading data from file...");
         DataContent dataContent = new DataContent();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -27,7 +22,6 @@ public class FileDataReader implements DataReader {
         dataContent.setMarkets(markets);
         List<Event> events = readEvents(mapper);
         dataContent.setEvents(events);
-        logger.info("finished reading data from file");
 
         return dataContent;
     }

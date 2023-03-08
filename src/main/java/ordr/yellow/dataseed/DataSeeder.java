@@ -23,7 +23,8 @@ public class DataSeeder {
         logger.info("loading initial data...");
 
         DataContent dataContent = this.dataReader.read();
-
         this.dataWriter.write(dataContent);
+
+        logger.info("finished loading initial data");
     }
 }
