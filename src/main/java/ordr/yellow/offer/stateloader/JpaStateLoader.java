@@ -2,9 +2,8 @@ package ordr.yellow.offer.stateloader;
 
 import ordr.yellow.offer.Event;
 import ordr.yellow.offer.Market;
+import ordr.yellow.offer.OfferRepository;
 import ordr.yellow.offer.StateLoader;
-import ordr.yellow.offer.repository.EventsRepository;
-import ordr.yellow.offer.repository.MarketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,23 +14,21 @@ import java.util.List;
 public class JpaStateLoader implements StateLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(JpaStateLoader.class);
-    private final MarketRepository marketRepository;
-    private final EventsRepository eventsRepository;
+    private final OfferRepository offerRepository;
 
-    public JpaStateLoader(MarketRepository marketRepository, EventsRepository eventsRepository) {
-        this.marketRepository = marketRepository;
-        this.eventsRepository = eventsRepository;
+    public JpaStateLoader(OfferRepository offerRepository) {
+        this.offerRepository = offerRepository;
     }
 
     @Override
     public List<Market> loadMarkets() {
-        logger.info("loading markets from jpa datastore");
-        return this.marketRepository.findAll();
+        logger.info("loading markets from datastore");
+        return this.offerRepository.getMarketRepository().findAll();
     }
 
     @Override
     public List<Event> loadEvents() {
-        logger.info("loading events from jpa datastore");
-        return this.eventsRepository.findAll();
+        logger.info("loading events from datastore");
+        return this.offerRepository.getEventsRepository().findAll();
     }
 }
