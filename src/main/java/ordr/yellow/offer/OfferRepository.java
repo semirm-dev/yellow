@@ -2,8 +2,7 @@ package ordr.yellow.offer;
 
 import lombok.Getter;
 import lombok.Setter;
-import ordr.yellow.offer.repository.EventsRepository;
-import ordr.yellow.offer.repository.MarketRepository;
+import ordr.yellow.offer.repository.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,10 +10,22 @@ import org.springframework.stereotype.Service;
 @Setter
 public class OfferRepository {
     private final MarketRepository marketRepository;
-    private final EventsRepository eventsRepository;
+    private final MarketOutcomeRepository marketOutcomeRepository;
+    private final EventRepository eventRepository;
+    private final EventMarketRepository eventMarketRepository;
+    private final EventMarketOutcomeRepository eventMarketOutcomeRepository;
 
-    public OfferRepository(MarketRepository marketRepository, EventsRepository eventsRepository) {
+    public OfferRepository(
+            MarketRepository marketRepository,
+            MarketOutcomeRepository marketOutcomeRepository,
+            EventRepository eventRepository,
+            EventMarketRepository eventMarketRepository,
+            EventMarketOutcomeRepository eventMarketOutcomeRepository
+    ) {
         this.marketRepository = marketRepository;
-        this.eventsRepository = eventsRepository;
+        this.marketOutcomeRepository = marketOutcomeRepository;
+        this.eventRepository = eventRepository;
+        this.eventMarketRepository = eventMarketRepository;
+        this.eventMarketOutcomeRepository = eventMarketOutcomeRepository;
     }
 }

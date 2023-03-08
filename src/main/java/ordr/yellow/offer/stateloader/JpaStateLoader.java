@@ -23,12 +23,16 @@ public class JpaStateLoader implements StateLoader {
     @Override
     public List<Market> loadMarkets() {
         logger.info("loading markets from datastore");
-        return this.offerRepository.getMarketRepository().findAll();
+        List<Market> markets = this.offerRepository.getMarketRepository().findAll();
+        logger.info("finished loading markets from datastore");
+        return markets;
     }
 
     @Override
     public List<Event> loadEvents() {
         logger.info("loading events from datastore");
-        return this.offerRepository.getEventsRepository().findAll();
+        List<Event> events = this.offerRepository.getEventRepository().findAll();
+        logger.info("finished loading events from datastore");
+        return events;
     }
 }
