@@ -5,16 +5,6 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
-// expose http api with events [event markets, event market outcomes]
-// can be filtered by startsAt
-//
-// load initial data from .json files to database
-// load initial state from database
-// data will then be updated from kafka
-//
-// offer service will keep track of app state
-// linkedlist to store all events
-
 @Service
 public class OfferService {
 

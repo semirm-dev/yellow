@@ -1,6 +1,5 @@
 package ordr.yellow.dataseed;
 
-import ordr.yellow.offer.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,5 @@ public class DataSeeder {
         DataContent dataContent = this.dataReader.read();
 
         this.dataWriter.write(dataContent);
-
     }
 }
