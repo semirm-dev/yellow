@@ -27,6 +27,7 @@ public class FileDataReader implements DataReader {
         dataContent.setMarkets(markets);
         List<Event> events = readEvents(mapper);
         dataContent.setEvents(events);
+        logger.info("finished reading data from file");
 
         return dataContent;
     }
