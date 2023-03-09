@@ -1,6 +1,7 @@
 package ns.yellow.offer.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -21,6 +22,6 @@ public class Market {
 
     private Status status;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<MarketOutcome> outcomes;
 }

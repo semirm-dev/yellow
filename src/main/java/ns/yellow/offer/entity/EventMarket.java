@@ -1,10 +1,7 @@
 package ns.yellow.offer.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import ns.yellow.offer.Status;
@@ -25,7 +22,7 @@ public class EventMarket {
 
     private Status status;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<EventMarketOutcome> outcomes;
 
     @OneToOne
