@@ -23,7 +23,4 @@ public class EventMarketOutcome {
     private Status status;
 
     private Double odd;
-
-    @OneToOne
-    private EventMarket eventMarket;
 }
