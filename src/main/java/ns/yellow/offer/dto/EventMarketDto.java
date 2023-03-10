@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import ns.yellow.offer.Status;
 import ns.yellow.offer.entity.Event;
-import ns.yellow.offer.entity.EventMarketOutcome;
 import ns.yellow.offer.entity.Market;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class EventMarketDto {
 
     private Status status;
 
-    private List<EventMarketOutcome> outcomes;
+    private List<EventMarketOutcomeDto> outcomes;
 
     private Event event;
 }
