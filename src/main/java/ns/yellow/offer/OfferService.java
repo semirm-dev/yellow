@@ -64,13 +64,17 @@ public class OfferService {
         this.eventKafkaTemplate.send("event", event);
     }
 
-    @KafkaListener(topics = "market", groupId = "offer")
+    @KafkaListener(topics = "market", groupId = "offer", containerFactory = "marketListenerContainerFactory")
     public void listenMarkets(MarketDto market) {
         logger.info("kafka markets received: " + market.getName());
     }
 
-    @KafkaListener(topicPartitions = @TopicPartition(topic = "event", partitions = {"0", "1"}), groupId = "offer")
+    @KafkaListener(
+            topicPartitions = @TopicPartition(topic = "event", partitions = {"0", "1"}),
+            groupId = "offer",
+            containerFactory = "eventListenerContainerFactory")
     public void listenEvents(ConsumerRecord<String, EventDto> record) {
-        logger.info("kafka events received on partition " + record.partition() + ", message: " + record.value());
+        EventDto event = record.value();
+        logger.info("kafka events received on partition " + record.partition() + ", message: " + event.getName());
     }
 }
