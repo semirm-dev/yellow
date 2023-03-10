@@ -1,7 +1,6 @@
 package ns.yellow.offer;
 
 import ns.yellow.offer.dto.EventDto;
-import ns.yellow.offer.dto.KafkaMessageDto;
 import ns.yellow.offer.dto.MarketDto;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -19,13 +18,19 @@ public class OfferService {
 
     private static final Logger logger = LoggerFactory.getLogger(OfferService.class);
     private final StateLoader stateLoader;
-    private final KafkaTemplate<String, KafkaMessageDto> kafkaTemplate;
+    private final KafkaTemplate<String, MarketDto> marketKafkaTemplate;
+    private final KafkaTemplate<String, EventDto> eventKafkaTemplate;
     private List<MarketDto> markets = new LinkedList<>();
     private List<EventDto> events = new LinkedList<>();
 
-    public OfferService(StateLoader stateLoader, KafkaTemplate<String, KafkaMessageDto> kafkaTemplate) {
+    public OfferService(
+            StateLoader stateLoader,
+            KafkaTemplate<String, MarketDto> marketKafkaTemplate,
+            KafkaTemplate<String, EventDto> eventKafkaTemplate
+    ) {
         this.stateLoader = stateLoader;
-        this.kafkaTemplate = kafkaTemplate;
+        this.marketKafkaTemplate = marketKafkaTemplate;
+        this.eventKafkaTemplate = eventKafkaTemplate;
     }
 
     public String healthz() {
@@ -49,18 +54,23 @@ public class OfferService {
         return this.events;
     }
 
-    public void sendMessage(KafkaMessageDto msg) {
-        logger.info("sending kafka message: " + msg.getMessage());
-        this.kafkaTemplate.send("market", msg);
+    public void sendMarketMessage(MarketDto market) {
+        logger.info("sending kafka market message: " + market.getName());
+        this.marketKafkaTemplate.send("market", market);
+    }
+
+    public void sendEventMessage(EventDto event) {
+        logger.info("sending kafka market message: " + event.getName());
+        this.eventKafkaTemplate.send("event", event);
     }
 
     @KafkaListener(topics = "market", groupId = "offer")
-    public void listenMarkets(KafkaMessageDto message) {
-        logger.info("kafka markets received: " + message.getMessage());
+    public void listenMarkets(MarketDto market) {
+        logger.info("kafka markets received: " + market.getName());
     }
 
     @KafkaListener(topicPartitions = @TopicPartition(topic = "event", partitions = {"0", "1"}), groupId = "offer")
-    public void listenEvents(ConsumerRecord<String, KafkaMessageDto> record) {
+    public void listenEvents(ConsumerRecord<String, EventDto> record) {
         logger.info("kafka events received on partition " + record.partition() + ", message: " + record.value());
     }
 }

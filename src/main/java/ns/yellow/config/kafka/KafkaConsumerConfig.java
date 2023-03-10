@@ -1,6 +1,7 @@
 package ns.yellow.config.kafka;
 
-import ns.yellow.offer.dto.KafkaMessageDto;
+import ns.yellow.offer.dto.EventDto;
+import ns.yellow.offer.dto.MarketDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,34 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
-    public ConsumerFactory<String, KafkaMessageDto> consumerFactory() {
+    public ConsumerFactory<String, MarketDto> marketConsumerFactory() {
+        Map<String, Object> props = kafkaProps();
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(MarketDto.class));
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, MarketDto> marketListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MarketDto> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(marketConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, EventDto> eventConsumerFactory() {
+        Map<String, Object> props = kafkaProps();
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(EventDto.class));
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, EventDto> eventListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, EventDto> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(eventConsumerFactory());
+        return factory;
+    }
+
+    private Map<String, Object> kafkaProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -38,14 +66,7 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 JsonSerializer.class);
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(KafkaMessageDto.class));
-    }
 
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaMessageDto> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, KafkaMessageDto> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
+        return props;
     }
 }

@@ -1,6 +1,7 @@
 package ns.yellow.config.kafka;
 
-import ns.yellow.offer.dto.KafkaMessageDto;
+import ns.yellow.offer.dto.EventDto;
+import ns.yellow.offer.dto.MarketDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,22 +22,39 @@ public class KafkaProducerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ProducerFactory<String, KafkaMessageDto> producerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapAddress);
-        configProps.put(
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        configProps.put(
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+    public ProducerFactory<String, MarketDto> marketProducerFactory() {
+        Map<String, Object> props = kafkaProps();
+        return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
-    public KafkaTemplate<String, KafkaMessageDto> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, MarketDto> marketTemplate() {
+        return new KafkaTemplate<>(marketProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, EventDto> eventProducerFactory() {
+        Map<String, Object> props = kafkaProps();
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
+    public KafkaTemplate<String, EventDto> eventTemplate() {
+        return new KafkaTemplate<>(eventProducerFactory());
+    }
+
+    private Map<String, Object> kafkaProps() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        props.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                JsonSerializer.class);
+
+        return props;
     }
 }

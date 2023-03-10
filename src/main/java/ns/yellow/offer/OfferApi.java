@@ -1,7 +1,6 @@
 package ns.yellow.offer;
 
 import ns.yellow.offer.dto.EventDto;
-import ns.yellow.offer.dto.KafkaMessageDto;
 import ns.yellow.offer.dto.MarketDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +32,13 @@ public class OfferApi {
         return ResponseEntity.ok(this.offerService.getEvents());
     }
 
-    @PostMapping("send")
-    public void sendMessage(@RequestBody KafkaMessageDto msg) {
-        this.offerService.sendMessage(msg);
+    @PostMapping("markets")
+    public void sendMarketMessage(@RequestBody MarketDto market) {
+        this.offerService.sendMarketMessage(market);
+    }
+
+    @PostMapping("events")
+    public void sendEventMessage(@RequestBody EventDto event) {
+        this.offerService.sendEventMessage(event);
     }
 }
