@@ -19,11 +19,11 @@ public class OfferService {
 
     private static final Logger logger = LoggerFactory.getLogger(OfferService.class);
     private final StateLoader stateLoader;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaMessageDto> kafkaTemplate;
     private List<MarketDto> markets = new LinkedList<>();
     private List<EventDto> events = new LinkedList<>();
 
-    public OfferService(StateLoader stateLoader, KafkaTemplate<String, String> kafkaTemplate) {
+    public OfferService(StateLoader stateLoader, KafkaTemplate<String, KafkaMessageDto> kafkaTemplate) {
         this.stateLoader = stateLoader;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -49,21 +49,18 @@ public class OfferService {
         return this.events;
     }
 
-    // TODO: listen for markets and events kafka topics
-    // TODO: update local state of markets and events with newly received markets and events from kafka
-
     public void sendMessage(KafkaMessageDto msg) {
         logger.info("sending kafka message: " + msg.getMessage());
-        this.kafkaTemplate.send("offer", msg.getMessage());
+        this.kafkaTemplate.send("market", msg);
     }
 
     @KafkaListener(topics = "market", groupId = "offer")
-    public void listenMarkets(String message) {
-        logger.info("kafka markets received: " + message);
+    public void listenMarkets(KafkaMessageDto message) {
+        logger.info("kafka markets received: " + message.getMessage());
     }
 
     @KafkaListener(topicPartitions = @TopicPartition(topic = "event", partitions = {"0", "1"}), groupId = "offer")
-    public void listenEvents(ConsumerRecord<String, String> record) {
-        logger.info("kafka events received on partition " + record.partition() + ", message: " + record.key());
+    public void listenEvents(ConsumerRecord<String, KafkaMessageDto> record) {
+        logger.info("kafka events received on partition " + record.partition() + ", message: " + record.value());
     }
 }

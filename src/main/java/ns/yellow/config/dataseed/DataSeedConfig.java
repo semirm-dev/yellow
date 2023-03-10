@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DataSeedConfig {
-
+    private static final Logger logger = LoggerFactory.getLogger(DataSeedConfig.class);
     private final DataSeeder dataSeeder;
     private final OfferService offerService;
 
@@ -18,8 +18,6 @@ public class DataSeedConfig {
         this.dataSeeder = dataSeeder;
         this.offerService = offerService;
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(DataSeedConfig.class);
 
     @Bean
     CommandLineRunner load() {
