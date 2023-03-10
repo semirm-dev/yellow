@@ -1,4 +1,4 @@
-package ns.yellow.config;
+package ns.yellow.config.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

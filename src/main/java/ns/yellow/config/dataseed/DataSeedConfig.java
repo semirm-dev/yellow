@@ -1,4 +1,4 @@
-package ns.yellow.config;
+package ns.yellow.config.dataseed;
 
 import ns.yellow.dataseed.DataSeeder;
 import ns.yellow.offer.OfferService;
